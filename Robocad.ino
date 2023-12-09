@@ -9,12 +9,13 @@ AF_DCMotor motor4(4);
 Servo servoMotor;       
 
 int relayPin = 9;       // Broche du relais pour l'électroaimant
-int chargeState = LOW;   // État de la charge (LOW: non attachée, HIGH: attachée)
 int servoPin = 10;
 
 void setup() {
   pinMode(relayPin, OUTPUT);
+  servoMotor.attach(servoPin);
   Serial.begin(9600);
+  servoMotor.write(0);
 }
 
 void loop() {
@@ -102,16 +103,13 @@ void stopRobot() {
 }
 
 void liftLoad() {
-  servoMotor.attach(servoPin);
+  digitalWrite(relayPin, HIGH);  // Activer l'électroaimant
   servoMotor.write(90);   // Position pour lever la charge
   delay(500);
-  chargeState = HIGH;
-  digitalWrite(relayPin, HIGH);  // Activer l'électroaimant
 }
 
 void dropLoad() {
+  digitalWrite(relayPin, LOW);   // Désactiver l'électroaimant
   servoMotor.write(0);    // Position pour baisser la charge
   delay(500);
-  chargeState = LOW;
-  digitalWrite(relayPin, LOW);   // Désactiver l'électroaimant
 }
